@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+        </script>
+        <style>
+            div  { display: table;      }
+            p     { display: table-row;  }
+            label { display: table-cell; }
+            input { display: table-cell; }
+            #control {
+             height:300px;
+             width: 300px;
+             display: grid;
+             grid: 100px / auto auto auto;
+             margin-left: 250px;
+             background-color: aliceblue;
+           }
+           #control div {
+            background-color: rgb(183, 186, 73);
+            }
+           #page {
+             display: grid;
+             grid: 500px / auto auto;
+           }
+           .c {
+                text-align: left;
+                padding: 0px 10px;
+                grid-column: 1 / span 3;
+           }
+          </style>
+    </head>
+    <body>
+        <form method="post" action="/" id="f">
+            url:<input id="url" name="url" value={{url_arg}}>
+        <div id="page">
+            <div>
+                <img id="src" width="500" height="500" >
+            </div>
+            <div id="control">
+                <div class ='c'>
+                    <p>
+                        <label for="current_control">current control:</label>
+                        <input id="current_control" name='current_control_name' value={{c_arg}}><br>
+                    </p>
+                    <p>
+                        <label for="state">state:</label>
+                        <input id="state" name='state' value={{state_arg}}>
+                    </p>
+                    <p>
+                        <label for="speed">speed:</label>
+                        <input id="speed" name='speed' value={{speed_arg}}>
+                    </p>
+                </div> 
+                <div>
+                    <img id='increase' src="https://icons-for-free.com/iconfiles/png/512/plus+icon-1320166903617346293.png" width="100" length="100" onClick='click_increase()'>
+                </div>
+                <div></div>
+                <div>
+                    <img id='decrease' src="https://icons-for-free.com/iconfiles/png/512/icon+minus+icon-1320183702426800883.png" width="100" length="100" onClick='click_decrease()'>
+                </div>
+                <div></div>
+                <div>
+                    <img id='up' src="https://icons-for-free.com/iconfiles/png/512/up+icon-1320166903471749762.png" width="100" length="100" onClick='click_up()'>
+                </div>
+                <div></div>
+                <div class="item4">
+                    <img id='left' src="https://icons-for-free.com/iconfiles/png/512/left+icon-1320166903396900204.png" width="100" length="100" onClick='click_left()'>
+                </div>
+                <div class="item5">
+                    <img id='play_stop' width="100" length="100" onClick='click_play_stop()'>
+                </div>
+                <div class="item6">
+                    <img id='right' src="https://icons-for-free.com/iconfiles/png/512/right+icon-1320166903431122881.png" width="100" length="100" onClick='click_right()'>
+                </div>
+                <div></div>
+                <div class="item5">
+                    <img id='down' src="https://icons-for-free.com/iconfiles/png/512/down+icon-1320166903363778256.png" width="100" length="100" onClick='click_down()'>
+                </div>
+                <div></div>
+            </div>
+        </div>
+    </form>
+        <script>
+            // var url_str = document.getElementById('url').value;
+            var icon_str = document.getElementById('state').value;
+            var speed = document.getElementById('speed').value;
+            var play_url = "https://icons-for-free.com/iconfiles/png/512/play+icon-1320183326084518754.png";
+            var stop_url = "https://icons-for-free.com/iconfiles/png/512/stop+icon-1320196062853148637.png";
+
+
+            if(icon_str == 'go') {
+                document.getElementById('play_stop').src = stop_url;
+            }
+            else if(icon_str == 'stop') {
+                document.getElementById('play_stop').src = play_url;
+            }
+
+            setInterval(function() {
+                    var url_str = document.getElementById('url').value;
+                    $.get({
+                    url: url_str,
+                    xhrFields: {
+                        responseType: "blob",
+                    },
+                    success: function(blobData) {
+                        const objectURL = URL.createObjectURL(blobData);
+                        $('#src').attr('src', objectURL);
+                    },
+                });
+            }, 100);
+            
+            function isStop() {
+                return document.getElementById('state').value == "stop" ? true : false;
+            }
+
+            function click_up() {
+                if (isStop())
+                    return;
+                $('#current_control').attr('value', 'forward');
+                $('#f').submit();
+            }
+            function click_left() {
+                if (isStop())
+                    return;
+                $('#current_control').attr('value', 'left');
+                $('#f').submit();
+            }
+            function click_right() { 
+                if (isStop())
+                    return;                
+                $('#current_control').attr('value', 'right');  
+                $('#f').submit();
+            }
+            function click_down() {  
+                if (isStop())
+                    return;              
+                $('#current_control').attr('value', 'backward');  
+                $('#f').submit();
+            }
+            function click_increase() {
+                if (isStop())
+                    return;
+                speed = parseInt(speed) + 10;              
+                $('#speed').attr('value', speed);  
+            
+                $('#f').submit();
+            }
+            function click_decrease() {
+                if (isStop())
+                    return;     
+                speed = speed - 10;                        
+                $('#speed').attr('value', speed);  
+                $('#f').submit();
+            }
+
+            function click_play_stop() {
+                var url = document.getElementById('play_stop').src;
+                console.log(url);
+                if (url == stop_url) {
+                    document.getElementById('current_control').value = "forward";
+                    document.getElementById('play_stop').src = play_url;                 
+                    $('#state').attr('value', 'stop');   
+                    $('#f').submit();
+                }
+                else {
+                    document.getElementById('play_stop').src = stop_url;                   
+                    $('#state').attr('value', 'go');   
+                    $('#f').submit();
+                }
+            }
+            
+        </script>
+    </body>
+</html>
