@@ -11,8 +11,8 @@
 #define CONTROL_PIN D7
 
 
-char* ssid = "TP-LINK_4E748E";
-char* password = "01242065";
+char* ssid = "*******";
+char* password = "*";
 String isPump = "";
 String node = "node1/";
 bool isRain = "";
