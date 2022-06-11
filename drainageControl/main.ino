@@ -2,8 +2,8 @@
 #include <FirebaseESP8266.h>
 #include <ESP8266WiFi.h>
 
-#define AUTH "23dDHNj7vM5HYWCDHa2YGUZRVE1jk61SkaUKjyyw"
-#define HOST "https://dktd-82ced-default-rtdb.asia-southeast1.firebasedatabase.app/"
+#define AUTH "AUTH_TOKEN"
+#define HOST "HOST_URL"
 #define WATER_LEVEL A0
 #define DROPRAIN D0
 #define LIMIT_HIGH_LEVEL 475
